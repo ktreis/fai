@@ -121,7 +121,7 @@ initialize() {
     # we only need some empty dirs
     set -e
     mkdir -p $archivedir/partial $aptcache/etc/apt/preferences.d $aptcache/var/lib/apt/lists/partial $aptcache/var/log/apt
-    > $statefile
+    cp $NFSROOT/var/tmp/dpkg-status $statefile
     set +e
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -157,7 +157,7 @@ add_base_packages() {
     echo "Adding packages of $cfdir/NFSROOT."
     if [ -f $NFSROOT/var/tmp/packages.nfsroot ]; then
 	plist=$(< $NFSROOT/var/tmp/packages.nfsroot)
-	apt-get $qflag -d $aptoptions -y --force-yes --fix-missing install $plist
+	apt-get $qflag -d $aptoptions --reinstall -y --force-yes --fix-missing install $plist
     else
 	echo "WARNING: $NFSROOT/var/tmp/packages.nfsroot does not exists."
 	echo "Can't add those packages. Maybe the nfsroot is not yet created."
@@ -169,7 +169,7 @@ add_base_packages() {
     if [ -f $NFSROOT/var/tmp/base-pkgs.lis ]; then
 	plist=$(< $NFSROOT/var/tmp/base-pkgs.lis)
 	apt-get $qflag $aptoptions update >/dev/null
-	apt-get $qflag -d $aptoptions -y --force-yes --fix-missing install $plist
+	apt-get $qflag -d $aptoptions --reinstall -y --force-yes --fix-missing install $plist
     else
 	echo "WARNING: $NFSROOT/var/tmp/base-pkgs.lis does not exists."
 	echo "Can't add those packages. Maybe the nfsroot is not yet created."

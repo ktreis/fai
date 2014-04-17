@@ -310,6 +310,8 @@ create_nfsroot() {
     fi
     # save the list of all packages in the base.tgz
     $ROOTCMD dpkg --get-selections | awk '/install$/ {print $1}' > var/tmp/base-pkgs.lis
+    # save the dpkg state
+    cp var/lib/dpkg/status var/tmp/dpkg-status
 
     if [ "$FAI_DEBMIRROR" ]; then
 	[ "$verbose" ] && echo "Mounting $FAI_DEBMIRROR to $NFSROOT/$MNTPOINT."
